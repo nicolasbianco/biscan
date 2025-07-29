@@ -3,10 +3,25 @@
 
 <head>
     <title>Elenco File</title>
+    <style>
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .download-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 
 <body>
     <h2>File nella cartella uploads/</h2>
+    <a href="{{ url_for('download_all') }}" class="download-btn">Scarica tutti i file (ZIP)</a>
     <ul>
         {% for file in files %}
         <li><a href="{{ url_for('uploaded_file', filename=file) }}" target="_blank">{{ file }}</a></li>
