@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask import send_from_directory
 import os
 from openpyxl import Workbook, load_workbook
@@ -11,6 +11,10 @@ EXCEL_FILE = 'activos.xlsx'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+app.secret_key = "supersegreta"
+ADMIN_USERNAME = "nbianco"
+ADMIN_PASSWORD = "bitroncina"
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
@@ -75,6 +79,30 @@ def upload_foto():
 @app.route("/uploads/<filename>")
 def uploaded_file(filename):
    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session["logged_in"] = True
+            return redirect(url_for("admin"))
+        flash("Credenziali non valide")
+    return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.pop("logged_in", None)
+    return redirect(url_for("login"))
+
+@app.route("/admin")
+def admin():
+    if not session.get("logged_in"):
+        return redirect(url_for("login"))
+    files = os.listdir(app.config["UPLOAD_FOLDER"])
+    files = [f for f in files if f.lower().endswith((".jpg", ".jpeg", ".png"))]
+    return render_template("admin.html", files=files)
 
 if __name__ == "__main__":
     init_excel()
