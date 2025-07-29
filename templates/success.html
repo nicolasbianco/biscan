@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Activo registrado</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .center { text-align: center; }
+        .btn { padding: 8px 16px; background: #1976d2; color: #fff; border: none; border-radius: 4px; margin: 5px; cursor: pointer; }
+        .btn:hover { background: #12539b; }
+        img { width: 320px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="center">
+        <img src="static/logo.svg" alt="Logo" width="200" height="100">
+    </div>
+    <div class="center">
+        <h1>¡Activo registrado!</h1>
+        <p>Código QR: <b>{{codigo}}</b></p>
+        <p>Foto guardada:</p>
+        <img src="/{{ruta_foto}}" alt="Foto del activo">
+        <br><br>
+        <a href="/" class="btn">Registrar otro activo</a>
+    </div>
+</body>
+</html>

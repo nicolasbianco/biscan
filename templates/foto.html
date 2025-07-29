@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Foto del Activo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .center { text-align: center; }
+        video { border:1px solid #000; width: 320px; }
+        canvas { display: none; }
+        img { width: 320px; margin-top: 10px; }
+        .btn { padding: 8px 16px; background: #1976d2; color: #fff; border: none; border-radius: 4px; margin: 5px; cursor: pointer; }
+        .btn:hover { background: #12539b; }
+    </style>
+</head>
+<body>
+    <div class="center">
+        <img src="static/logo.svg" alt="Logo" width="200" height="100">
+    </div>
+    <div class="center">
+        <h1>Foto del activo<br><small>(Código: {{codigo}})</small></h1>
+        <video id="video" autoplay></video>
+        <canvas id="canvas" width="320" height="240"></canvas>
+        <form id="foto-form" method="POST" action="/upload_foto">
+            <input type="hidden" name="codigo" value="{{codigo}}">
+            <input type="hidden" name="foto" id="foto">
+            <br>
+            <button type="button" class="btn" onclick="tomarFoto()">Tomar foto</button>
+            <button type="submit" class="btn" id="enviar-btn" style="display:none;">Guardar activo</button>
+        </form>
+        <div id="preview"></div>
+        <br>
+        <a href="/" class="btn">Escanear otro QR</a>
+    </div>
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const fotoInput = document.getElementById('foto');
+        const enviarBtn = document.getElementById('enviar-btn');
+        const preview = document.getElementById('preview');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            video.srcObject = stream;
+        });
+
+        function tomarFoto() {
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            let dataUrl = canvas.toDataURL('image/jpeg');
+            fotoInput.value = dataUrl;
+            preview.innerHTML = '<img src="' + dataUrl + '">';
+            enviarBtn.style.display = 'inline-block';
+        }
+    </script>
+</body>
+</html>
