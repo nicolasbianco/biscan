@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask import send_from_directory
 import os
 from openpyxl import Workbook, load_workbook
 from werkzeug.utils import secure_filename
@@ -73,7 +74,7 @@ def upload_foto():
 
 @app.route("/uploads/<filename>")
 def uploaded_file(filename):
-    return app.send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+   return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == "__main__":
     init_excel()
