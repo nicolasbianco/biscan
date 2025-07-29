@@ -19,7 +19,7 @@
     </div>
     <div class="center">
         <h1>Foto del activo<br><small>(Código: {{codigo}})</small></h1>
-        <video id="video" autoplay></video>
+        <video id="video" autoplay playsinline></video>
         <canvas id="canvas" width="320" height="240"></canvas>
         <form id="foto-form" method="POST" action="/upload_foto">
             <input type="hidden" name="codigo" value="{{codigo}}">
@@ -39,9 +39,31 @@
         const enviarBtn = document.getElementById('enviar-btn');
         const preview = document.getElementById('preview');
 
-        navigator.mediaDevices.getUserMedia({ video: true })
+        // Configuración para usar la cámara trasera
+        const constraints = {
+            video: {
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+                facingMode: { exact: "environment" }  // Esto fuerza la cámara trasera
+            }
+        };
+
+        // Iniciar la cámara trasera
+        navigator.mediaDevices.getUserMedia(constraints)
         .then(function(stream) {
             video.srcObject = stream;
+        })
+        .catch(function(error) {
+            console.error("Error al acceder a la cámara trasera:", error);
+            // Si falla, intentar con cualquier cámara como fallback
+            navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+            })
+            .catch(function(error) {
+                console.error("Error al acceder a cualquier cámara:", error);
+                alert("No se pudo acceder a la cámara. Por favor, asegúrate de dar los permisos necesarios.");
+            });
         });
 
         function tomarFoto() {
