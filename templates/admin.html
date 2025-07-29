@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Elenco File</title>
+</head>
+
+<body>
+    <h2>File nella cartella uploads/</h2>
+    <ul>
+        {% for file in files %}
+        <li><a href="{{ url_for('uploaded_file', filename=file) }}" target="_blank">{{ file }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+
+</html>
