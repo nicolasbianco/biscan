@@ -5,6 +5,8 @@ from openpyxl import Workbook, load_workbook
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import base64
+from io import BytesIO
+import zipfile
 
 UPLOAD_FOLDER = 'uploads'
 EXCEL_FILE = 'activos.xlsx'
